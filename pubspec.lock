@@ -235,6 +235,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_inset_shadow:
+    dependency: "direct main"
+    description:
+      name: flutter_inset_shadow
+      sha256: "5978b67f028c7ca3566516eda14f0a25a5ce13c0fa21a86a48a0b00faa7db9d7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.3"
   flutter_launcher_icons:
     dependency: "direct main"
     description:
@@ -251,14 +259,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.0"
-  flutter_neumorphic:
-    dependency: "direct main"
-    description:
-      name: flutter_neumorphic
-      sha256: "02606d937a3ceaa497b8a7c25f3efa95188bf93d77ebf0bd6552e432db4c2ec6"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.2.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter

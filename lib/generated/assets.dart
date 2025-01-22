@@ -2,6 +2,11 @@
 class Assets {
   Assets._();
 
+  static const String bgImagesImg = 'assets/bg_images/img.png';
+  static const String bgImagesPopupBg = 'assets/bg_images/popup_bg.png';
+  static const String bgImagesPopupBg1 = 'assets/bg_images/popup_bg1.png';
+  static const String bgImagesTrnmtbg1 = 'assets/bg_images/trnmtbg1.png';
+  static const String iconsRdbtick = 'assets/icons/rdbtick.png';
   static const String logoLogo = 'assets/logo/logo.png';
 
 }
