@@ -2,14 +2,22 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:knockout_tournament/core/utils/screen_utils.dart';
+import 'package:knockout_tournament/features/tournament/data/models/player_model.dart';
 import 'package:knockout_tournament/generated/assets.dart';
 
+typedef StringCallback = void Function(Player);
+
 class AddPlayerDialog extends StatelessWidget {
+
   final String oprTitle;
   final String btnTitle;
-  final VoidCallback onPressed;
-  const AddPlayerDialog({super.key, required this.oprTitle, required this.btnTitle, required this.onPressed});
+  final StringCallback onPressed;
+  AddPlayerDialog({super.key, required this.oprTitle, required this.btnTitle, required this.onPressed});
+
+  TextEditingController nameCtrl = TextEditingController();
+  TextEditingController idCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -55,15 +63,19 @@ class AddPlayerDialog extends StatelessWidget {
               Form(
                 child: Column(
                   children: [
-                    TextInputField(heading: "Player name", maxlength: 30),
+                    TextInputField(heading: "Player name", maxlength: 30, ctrl: nameCtrl,),
                     SizedBox(height: 10,),
-                    TextInputField(heading: "Player ID", maxlength: 10),
+                    TextInputField(heading: "Player ID", maxlength: 10, ctrl: idCtrl,),
                   ],
                 ),
               ),
               Spacer(),
               ElevatedButton(
-                onPressed: onPressed,
+                onPressed: (){
+                  Player newPlayer = Player(name: nameCtrl.text, gamerTag: idCtrl.text, imageUrl: '');
+                  onPressed(newPlayer);
+                  Navigator.pop(context);
+                },
                 style: ElevatedButton.styleFrom( elevation: 5, shadowColor: Colors.red, padding: EdgeInsets.zero, shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(0), ), ),
                 child: Container(
                   width: ScreenUtils.screenWidth!*0.7,
@@ -92,8 +104,9 @@ class AddPlayerDialog extends StatelessWidget {
 }
 
 class TextInputField extends StatelessWidget {
-  TextInputField({super.key, required this.heading, required this.maxlength});
+  const TextInputField({super.key, required this.ctrl, required this.heading, required this.maxlength});
 
+  final TextEditingController ctrl;
   final String heading;
   final int maxlength;
 
@@ -131,8 +144,9 @@ class TextInputField extends StatelessWidget {
                 ),
               ),
               child: TextFormField(
+                controller: ctrl,
                 maxLength: maxlength,
-                inputFormatters: [ FilteringTextInputFormatter.allow(RegExp(r'[A-Z0-9]')), ],
+                inputFormatters: [ FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]')), ],
                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 22),
                 decoration: InputDecoration(
 

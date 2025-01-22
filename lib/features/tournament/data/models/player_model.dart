@@ -5,20 +5,26 @@ part 'player_model.g.dart';
 @HiveType(typeId: 0)
 class Player {
   @HiveField(0)
-  final String name;
+  String name;
 
   @HiveField(1)
-  final String gamerTag;
+  String gamerTag;
 
   @HiveField(2)
-  final String imageUrl;
+  String imageUrl;
 
+  @HiveField(3)
   bool isWinner;
+
+  @override
+  String toString() {
+    return 'Player{name: $name, gamerTag: $gamerTag, imageUrl: $imageUrl, isWinner: $isWinner}';
+  }
 
   Player({
     required this.name,
     required this.gamerTag,
     required this.imageUrl,
-    this.isWinner = false
+    this.isWinner = false,
   });
 }

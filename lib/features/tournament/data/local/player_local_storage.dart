@@ -7,6 +7,7 @@ class PlayerLocalStorage {
   static const String boxName = 'players';
 
   Future<void> addPlayer(Player player) async {
+    print("Added player: ${player.toString()}");
     final box = await Hive.openBox<Player>(boxName);
     await box.add(player);
   }

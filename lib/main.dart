@@ -5,13 +5,18 @@ import 'package:knockout_tournament/core/utils/screen_utils.dart';
 import 'package:knockout_tournament/features/tournament/presentation/pages/tournament_page2.dart';
 import 'package:knockout_tournament/injection.dart';
 
+import 'features/tournament/data/models/player_model.dart';
 import 'features/tournament/presentation/pages/tournament_page.dart';
 
 void main() async {
   // Initialising Hive
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Hive
   await Hive.initFlutter();
 
+  // Register the Player Adapter
+  Hive.registerAdapter(PlayerAdapter());
   // Initiatiing dependencies injection
   setupDependencyInjection();
 
@@ -28,7 +33,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Knockout Tournament',
-      home: const TournamentPage2(),
+      home: TournamentPage2(),
     );
   }
 }

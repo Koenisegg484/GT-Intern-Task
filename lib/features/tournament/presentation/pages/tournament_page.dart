@@ -146,7 +146,7 @@ class _TournamentPageState extends State<TournamentPage> {
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return AddPlayerDialog(oprTitle: "ADD TITLE", btnTitle: "ADD", onPressed: () {
+              return AddPlayerDialog(oprTitle: "ADD TITLE", btnTitle: "ADD", onPressed: (player) {
                 Get.snackbar("Dialogue", "was pressed");
               },);
               // return AddPlayerPopup();
