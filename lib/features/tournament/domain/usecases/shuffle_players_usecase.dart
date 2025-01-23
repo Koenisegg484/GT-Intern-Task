@@ -18,17 +18,3 @@ class ShufflePlayersUsecase {
     return pairs;
   }
 }
-
-
-// class ShufflePlayersUsecase {
-//   List<List<Player>> call(List<Player> players) {
-//     players.shuffle();
-//     List<List<Player>> pairs = [];
-//     for (int i = 0; i < players.length; i += 2) {
-//       if (i + 1 < players.length) {
-//         pairs.add([players[i], players[i + 1]]);
-//       }
-//     }
-//     return pairs;
-//   }
-// }

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:knockout_tournament/features/tournament/data/local/player_local_storage.dart';
 import 'package:knockout_tournament/features/tournament/data/models/player_model.dart';
 import 'package:knockout_tournament/features/tournament/domain/usecases/determine_winners_usecase.dart';
@@ -24,16 +25,15 @@ class TournamentController extends GetxController{
     shuffleAndGeneratePairs();
   }
 
-  void _initialisePlayers() async{
-    players.value = await _playerLocalStorage.getPlayers();
+  Future<void> _initialisePlayers() async {
+    final box = await Hive.openBox<Player>(PlayerLocalStorage.boxName);
+    players.value = box.values.toList();
   }
 
   void shuffleAndGeneratePairs() {
     final timestamp = DateTime.now().toString();
     shuffleHistory.add(timestamp);
-
     matchedPairs.value = _shufflePlayersUsecase(players.value);
-    print("Matched Pairs: $matchedPairs");
     Get.snackbar("Hooray!!!", "Player match pairs have been shuffled");
   }
 
@@ -81,12 +81,11 @@ class TournamentController extends GetxController{
     }
   }
 
-  void addPlayer(Player newPlayer) {
-    players.add(newPlayer);
-    _playerLocalStorage.addPlayer(newPlayer);
+  Future<void> addPlayer(Player newPlayer) async {
+    final box = await Hive.openBox<Player>(PlayerLocalStorage.boxName);
+    await box.add(newPlayer);
+    players.value = box.values.toList();
     shuffleAndGeneratePairs();
-    print(newPlayer.toString());
-    print(players);
   }
 
 
