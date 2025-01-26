@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:knockout_tournament/features/tournament/data/local/player_local_storage.dart';
 import 'package:knockout_tournament/features/tournament/data/models/player_model.dart';
+import 'package:knockout_tournament/features/tournament/domain/usecases/add_player_usecase.dart';
+import 'package:knockout_tournament/features/tournament/domain/usecases/delete_player_usecase.dart';
 import 'package:knockout_tournament/features/tournament/domain/usecases/determine_winners_usecase.dart';
+import 'package:knockout_tournament/features/tournament/domain/usecases/edit_player_usecase.dart';
 import 'package:knockout_tournament/features/tournament/domain/usecases/shuffle_players_usecase.dart';
 
 class TournamentController extends GetxController{
@@ -10,6 +12,9 @@ class TournamentController extends GetxController{
   final ShufflePlayersUsecase _shufflePlayersUsecase = ShufflePlayersUsecase();
   final DetermineWinnersUsecase _determineWinnersUsecase = DetermineWinnersUsecase();
   final PlayerLocalStorage _playerLocalStorage = PlayerLocalStorage();
+  late final AddPlayerUseCase _addPlayerUseCase;
+  late final EditPlayerUseCase _editPlayerUseCase;
+  late final DeletePlayerUseCase _deletePlayerUseCase;
 
   RxList<Player> players = <Player>[].obs;
   RxList<List<Player>> matchedPairs = <List<Player>>[].obs;
@@ -21,24 +26,38 @@ class TournamentController extends GetxController{
   @override
   void onInit() {
     super.onInit();
+    _editPlayerUseCase = EditPlayerUseCase(_playerLocalStorage);
+    _deletePlayerUseCase = DeletePlayerUseCase(_playerLocalStorage);
+    _addPlayerUseCase = AddPlayerUseCase(_playerLocalStorage);
     _initialisePlayers();
-    shuffleAndGeneratePairs();
   }
 
   Future<void> _initialisePlayers() async {
-    final box = await Hive.openBox<Player>(PlayerLocalStorage.boxName);
-    players.value = box.values.toList();
+    players.value = await _playerLocalStorage.getPlayers();
+    shuffleAndGeneratePairs();
   }
 
   void shuffleAndGeneratePairs() {
     final timestamp = DateTime.now().toString();
     shuffleHistory.add(timestamp);
     matchedPairs.value = _shufflePlayersUsecase(players.value);
-    Get.snackbar("Hooray!!!", "Player match pairs have been shuffled");
   }
 
+  Future<void> editPlayer(String playerId, Player updatedPlayer) async {
+    await _editPlayerUseCase.execute(playerId, updatedPlayer);
+  }
+
+  Future<void> deletePlayer(String playerId) async {
+    await _deletePlayerUseCase.execute(playerId);
+    players.value = await _playerLocalStorage.getPlayers();
+    shuffleAndGeneratePairs();
+  }
 
   void progressToNextRound(){
+    if(matchedPairs.value.length == 1){
+      Get.snackbar("End of Tournament", "The tournament has ended");
+      return;
+    }
     players.value = _determineWinnersUsecase(matchedPairs.value);
     currentRound.value++;
 
@@ -81,13 +100,11 @@ class TournamentController extends GetxController{
     }
   }
 
-  Future<void> addPlayer(Player newPlayer) async {
-    final box = await Hive.openBox<Player>(PlayerLocalStorage.boxName);
-    await box.add(newPlayer);
-    players.value = box.values.toList();
+  Future<void> addPlayer(Player player) async {
+    await _addPlayerUseCase.execute(player);
+    players.value = await _playerLocalStorage.getPlayers();
     shuffleAndGeneratePairs();
   }
-
 
   void selectWinner(List<Player> pair, Player winner){
     for(var player in pair){

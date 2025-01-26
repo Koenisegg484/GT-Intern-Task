@@ -19,9 +19,8 @@ class PlayerAdapter extends TypeAdapter<Player> {
     return Player(
       name: fields[0] as String,
       gamerTag: fields[1] as String,
-      imageUrl: fields[2] as String,
       isWinner: fields[3] as bool,
-    );
+    )..imageUrl = fields[2] as String;
   }
 
   @override

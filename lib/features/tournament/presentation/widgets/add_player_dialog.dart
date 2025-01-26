@@ -28,11 +28,12 @@ class AddPlayerDialog extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.only(left: screenWidth*0.05, right: screenWidth*0.05, top: 0, bottom: screenWidth*0.05),
           width: screenWidth * 0.9,
-          height: screenHeight * 0.4,
+          // height: screenHeight * 0.4,
           decoration: BoxDecoration(
             image: DecorationImage(image: AssetImage(Assets.bgImagesPopupBg),fit: BoxFit.fill),
           ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
@@ -67,10 +68,10 @@ class AddPlayerDialog extends StatelessWidget {
                   ],
                 ),
               ),
-              Spacer(),
+              SizedBox(height: screenHeight*0.05,),
               ElevatedButton(
                 onPressed: () {
-                  Player newPlayer = Player(name: nameCtrl.text, gamerTag: idCtrl.text, imageUrl: '');
+                  Player newPlayer = Player(name: nameCtrl.text, gamerTag: idCtrl.text);
                   onPressed(newPlayer);
                   Navigator.pop(context);
                 },

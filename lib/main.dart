@@ -6,7 +6,6 @@ import 'package:knockout_tournament/features/tournament/presentation/pages/tourn
 import 'package:knockout_tournament/injection.dart';
 
 import 'features/tournament/data/models/player_model.dart';
-import 'features/tournament/presentation/pages/tournament_page.dart';
 
 void main() async {
   // Initialising Hive
